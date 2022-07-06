@@ -1,0 +1,233 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="voteModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="AdminRecord">
+          <Key>
+            <PropertyRef Name="Admin_id" />
+          </Key>
+          <Property Name="Admin_id" Type="int" Nullable="false" />
+          <Property Name="password" Type="nvarchar" MaxLength="10" Nullable="false" />
+          <Property Name="name" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="Candidate">
+          <Key>
+            <PropertyRef Name="Party_id" />
+          </Key>
+          <Property Name="Party_id" Type="int" Nullable="false" />
+          <Property Name="partyname" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="candidatename" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="votecount" Type="int" />
+        </EntityType>
+        <EntityType Name="vote">
+          <Key>
+            <PropertyRef Name="vote_id" />
+          </Key>
+          <Property Name="Voter_id" Type="int" Nullable="false" />
+          <Property Name="Party_id" Type="int" Nullable="false" />
+          <Property Name="vote_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+        </EntityType>
+        <EntityType Name="voters">
+          <Key>
+            <PropertyRef Name="voter_id" />
+          </Key>
+          <Property Name="voter_id" Type="int" Nullable="false" />
+          <Property Name="name" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="mobile" Type="nchar" MaxLength="10" />
+          <Property Name="birthdate" Type="date" />
+          <Property Name="address" Type="nvarchar" MaxLength="50" />
+          <Property Name="password" Type="nvarchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_admin_Candidate">
+          <End Role="Candidate" Type="Self.Candidate" Multiplicity="1" />
+          <End Role="vote" Type="Self.vote" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Candidate">
+              <PropertyRef Name="Party_id" />
+            </Principal>
+            <Dependent Role="vote">
+              <PropertyRef Name="Party_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_admin_voters">
+          <End Role="voters" Type="Self.voters" Multiplicity="1" />
+          <End Role="vote" Type="Self.vote" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="voters">
+              <PropertyRef Name="voter_id" />
+            </Principal>
+            <Dependent Role="vote">
+              <PropertyRef Name="Voter_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="voteModelStoreContainer">
+          <EntitySet Name="AdminRecord" EntityType="Self.AdminRecord" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Candidate" EntityType="Self.Candidate" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="vote" EntityType="Self.vote" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="voters" EntityType="Self.voters" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_admin_Candidate" Association="Self.FK_admin_Candidate">
+            <End Role="Candidate" EntitySet="Candidate" />
+            <End Role="vote" EntitySet="vote" />
+          </AssociationSet>
+          <AssociationSet Name="FK_admin_voters" Association="Self.FK_admin_voters">
+            <End Role="voters" EntitySet="voters" />
+            <End Role="vote" EntitySet="vote" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="voteModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Candidate">
+          <Key>
+            <PropertyRef Name="Party_id" />
+          </Key>
+          <Property Name="Party_id" Type="Int32" Nullable="false" />
+          <Property Name="partyname" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="candidatename" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="votecount" Type="Int32" />
+          <NavigationProperty Name="votes" Relationship="voteModel.FK_admin_Candidate1" FromRole="Candidate" ToRole="vote" />
+        </EntityType>
+        <EntityType Name="voter">
+          <Key>
+            <PropertyRef Name="voter_id" />
+          </Key>
+          <Property Name="voter_id" Type="Int32" Nullable="false" />
+          <Property Name="name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="mobile" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
+          <Property Name="birthdate" Type="DateTime" Precision="0" />
+          <Property Name="address" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="password" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="votes" Relationship="voteModel.FK_admin_voters1" FromRole="voter" ToRole="vote" />
+        </EntityType>
+        <EntityContainer Name="voteEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Candidates" EntityType="Self.Candidate" />
+          <EntitySet Name="voters" EntityType="Self.voter" />
+          <EntitySet Name="AdminRecords" EntityType="voteModel.AdminRecord" />
+          <EntitySet Name="votes" EntityType="voteModel.vote" />
+          <AssociationSet Name="FK_admin_Candidate1" Association="voteModel.FK_admin_Candidate1">
+            <End Role="Candidate" EntitySet="Candidates" />
+            <End Role="vote" EntitySet="votes" />
+          </AssociationSet>
+          <AssociationSet Name="FK_admin_voters1" Association="voteModel.FK_admin_voters1">
+            <End Role="voter" EntitySet="voters" />
+            <End Role="vote" EntitySet="votes" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="AdminRecord">
+          <Key>
+            <PropertyRef Name="Admin_id" />
+          </Key>
+          <Property Name="Admin_id" Type="Int32" Nullable="false" />
+          <Property Name="password" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="vote">
+          <Key>
+            <PropertyRef Name="vote_id" />
+          </Key>
+          <Property Name="Voter_id" Type="Int32" Nullable="false" />
+          <Property Name="Party_id" Type="Int32" Nullable="false" />
+          <Property Name="vote_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <NavigationProperty Name="Candidate" Relationship="voteModel.FK_admin_Candidate1" FromRole="vote" ToRole="Candidate" />
+          <NavigationProperty Name="voter" Relationship="voteModel.FK_admin_voters1" FromRole="vote" ToRole="voter" />
+        </EntityType>
+        <Association Name="FK_admin_Candidate1">
+          <End Type="voteModel.Candidate" Role="Candidate" Multiplicity="1" />
+          <End Type="voteModel.vote" Role="vote" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Candidate">
+              <PropertyRef Name="Party_id" />
+            </Principal>
+            <Dependent Role="vote">
+              <PropertyRef Name="Party_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_admin_voters1">
+          <End Type="voteModel.voter" Role="voter" Multiplicity="1" />
+          <End Type="voteModel.vote" Role="vote" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="voter">
+              <PropertyRef Name="voter_id" />
+            </Principal>
+            <Dependent Role="vote">
+              <PropertyRef Name="Voter_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="voteModelStoreContainer" CdmEntityContainer="voteEntities">
+          <EntitySetMapping Name="Candidates">
+            <EntityTypeMapping TypeName="voteModel.Candidate">
+              <MappingFragment StoreEntitySet="Candidate">
+                <ScalarProperty Name="Party_id" ColumnName="Party_id" />
+                <ScalarProperty Name="partyname" ColumnName="partyname" />
+                <ScalarProperty Name="candidatename" ColumnName="candidatename" />
+                <ScalarProperty Name="votecount" ColumnName="votecount" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="voters">
+            <EntityTypeMapping TypeName="voteModel.voter">
+              <MappingFragment StoreEntitySet="voters">
+                <ScalarProperty Name="voter_id" ColumnName="voter_id" />
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="mobile" ColumnName="mobile" />
+                <ScalarProperty Name="birthdate" ColumnName="birthdate" />
+                <ScalarProperty Name="address" ColumnName="address" />
+                <ScalarProperty Name="password" ColumnName="password" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="AdminRecords">
+            <EntityTypeMapping TypeName="voteModel.AdminRecord">
+              <MappingFragment StoreEntitySet="AdminRecord">
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="password" ColumnName="password" />
+                <ScalarProperty Name="Admin_id" ColumnName="Admin_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="votes">
+            <EntityTypeMapping TypeName="voteModel.vote">
+              <MappingFragment StoreEntitySet="vote">
+                <ScalarProperty Name="vote_id" ColumnName="vote_id" />
+                <ScalarProperty Name="Party_id" ColumnName="Party_id" />
+                <ScalarProperty Name="Voter_id" ColumnName="Voter_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

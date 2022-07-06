@@ -1,0 +1,45 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="voteModelStoreContainer" CdmEntityContainer="voteEntities">
+    <EntitySetMapping Name="Candidates">
+      <EntityTypeMapping TypeName="voteModel.Candidate">
+        <MappingFragment StoreEntitySet="Candidate">
+          <ScalarProperty Name="Party_id" ColumnName="Party_id" />
+          <ScalarProperty Name="partyname" ColumnName="partyname" />
+          <ScalarProperty Name="candidatename" ColumnName="candidatename" />
+          <ScalarProperty Name="votecount" ColumnName="votecount" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="voters">
+      <EntityTypeMapping TypeName="voteModel.voter">
+        <MappingFragment StoreEntitySet="voters">
+          <ScalarProperty Name="voter_id" ColumnName="voter_id" />
+          <ScalarProperty Name="name" ColumnName="name" />
+          <ScalarProperty Name="mobile" ColumnName="mobile" />
+          <ScalarProperty Name="birthdate" ColumnName="birthdate" />
+          <ScalarProperty Name="address" ColumnName="address" />
+          <ScalarProperty Name="password" ColumnName="password" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="AdminRecords">
+      <EntityTypeMapping TypeName="voteModel.AdminRecord">
+        <MappingFragment StoreEntitySet="AdminRecord">
+          <ScalarProperty Name="name" ColumnName="name" />
+          <ScalarProperty Name="password" ColumnName="password" />
+          <ScalarProperty Name="Admin_id" ColumnName="Admin_id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="votes">
+      <EntityTypeMapping TypeName="voteModel.vote">
+        <MappingFragment StoreEntitySet="vote">
+          <ScalarProperty Name="vote_id" ColumnName="vote_id" />
+          <ScalarProperty Name="Party_id" ColumnName="Party_id" />
+          <ScalarProperty Name="Voter_id" ColumnName="Voter_id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+  </EntityContainerMapping>
+</Mapping>
